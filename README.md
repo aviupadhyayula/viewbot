@@ -1,11 +1,9 @@
 Viewbot.py
 =========
-
 A Python script that generates unique, proxy-driven views for any inputted website. Uses Selenium to scrape free proxies from providers, then aggregates them and deploys an automated web driver with a rotating IP address.
 
 Dependencies
 ------------
-
 - All code is written in Python 3.
 - Relies on the 'selenium' library.
 - Requires installation of Google Chrome.
@@ -26,5 +24,5 @@ Execute the viewbot.py file. Input your desired website, and then requisite amou
 
 ### Replit ###
 Add the following snippets beneath every initialization of the webdriver to avoid crashes:
-- `options.add_argument("--no-sandbox")
-- 'options.add_argument("--disable-dev-shm-usage")
+- `options.add_argument("--no-sandbox")`
+- 'options.add_argument("--disable-dev-shm-usage")`
