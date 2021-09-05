@@ -15,6 +15,7 @@ print("Running from: " + driverpath)
 # gets user input
 link = input("Enter your link: ")
 views = int(input("How many views: "))
+delay = int(input("Enter how long you'd like the webdriver to wait on load: "))
 
 # configures webdriver options
 options = webdriver.ChromeOptions()
@@ -58,6 +59,7 @@ for i in range(0, len(proxies)):
         options.add_experimental_option('useAutomationExtension', False)
         driver = webdriver.Chrome(options=options, executable_path=driverpath)
         driver.get(link)
+        time.sleep(delay)
         driver.quit()
     except Exception:
         driver.quit()
