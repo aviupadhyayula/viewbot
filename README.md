@@ -27,4 +27,4 @@ Add the following snippets beneath every initialization of the webdriver to avoi
 - `options.add_argument("--no-sandbox")`
 - `options.add_argument("--disable-dev-shm-usage")`
 
-Remove every occurrence of `executable_path=driverpath`
+Remove every occurrence of `executable_path=driverpath`.
