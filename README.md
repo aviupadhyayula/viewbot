@@ -19,4 +19,6 @@ Setup
 
 Usage
 -----
-Execute the viewbot.py file. Input your desired website, and then requisite amount of views. (Keep in mind that the providers this script scrapes proxies from may limit the amount you can extract; 100 is generally the maximum per run.)
+Execute the viewbot.py file. Input your desired website, and then requisite amount of views. 
+
+(Keep in mind that the providers this script scrapes proxies from may limit the amount you can extract; 100 is generally the maximum per run.)
