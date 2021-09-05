@@ -1,5 +1,6 @@
 import os
 import time
+import random
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -17,6 +18,7 @@ views = int(input("How many views: "))
 
 # configures webdriver options
 options = webdriver.ChromeOptions()
+options.add_argument("start-maximized")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
 driver = webdriver.Chrome(options=options, executable_path=driverpath)
@@ -51,9 +53,11 @@ for i in range(0, len(proxies)):
         print("Proxy selected: {}".format(proxies[i]))
         options = webdriver.ChromeOptions()
         options.add_argument('--proxy-server={}'.format(proxies[i]))
+        options.add_argument("start-maximized")
+        options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        options.add_experimental_option('useAutomationExtension', False)
         driver = webdriver.Chrome(options=options, executable_path=driverpath)
         driver.get(link)
-        driver.execute_script("window.scrollTo(0, 1000);")
         driver.quit()
     except Exception:
         driver.quit()
