@@ -26,4 +26,5 @@ Execute the viewbot.py file. Input your desired website, and then requisite amou
 Add the following snippets beneath every initialization of the webdriver to avoid crashes:
 - `options.add_argument("--no-sandbox")`
 - `options.add_argument("--disable-dev-shm-usage")`
+
 Remove every occurrence of `executable_path=driverpath`
