@@ -13,7 +13,7 @@ Setup
 -----
 - Clone this repository to your desktop; make sure to keep viewbot.py and the included chromedriver file in the same folder.
 - `python3 -m pip install selenium`
-- [Download](https://chromedriver.chromium.org/downloads "https://chromedriver.chromium.org/downloads") the version of chromedriver that matches your version of Google Chrome. The one included in the repository corresponds to Chrome version 93.
+- [Download](https://chromedriver.chromium.org/downloads "https://chromedriver.chromium.org/downloads") the version of chromedriver that matches your version of Google Chrome. The one included in the repository corresponds to Chrome version 93. If this doesn't correspond to your version of Chrome, replace it.
 
 Usage
 -----
@@ -25,4 +25,4 @@ Execute the viewbot.py file. Input your desired website, and then requisite amou
 ### Replit ###
 Add the following snippets beneath every initialization of the webdriver to avoid crashes:
 - `options.add_argument("--no-sandbox")`
-- 'options.add_argument("--disable-dev-shm-usage")`
+- `options.add_argument("--disable-dev-shm-usage")`
