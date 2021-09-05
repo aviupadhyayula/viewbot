@@ -14,7 +14,7 @@ Dependencies
 Setup
 -----
 - Clone this repository to your desktop; make sure to keep viewbot.py and the included chromedriver file in the same folder.
-- code() python3 -m pip install selenium
+- `python3 -m pip install selenium`
 - [Named Link](https://chromedriver.chromium.org/downloads "Download") the version of chromedriver that matches your version of Google Chrome. The one included in the repository corresponds to Chrome version 93.
 
 Usage
