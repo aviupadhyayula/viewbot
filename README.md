@@ -1,5 +1,5 @@
-Viewbot
-=======
+Viewbot.py
+=========
 
 A Python script that generates unique, proxy-driven views for any inputted website. uses Selenium to scrape free proxies from providers, then aggregates them and deploys an automated web driver with a rotating IP address.
 
