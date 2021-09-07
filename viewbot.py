@@ -6,10 +6,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.keys import Keys
 
 # setting up relative file path
 dirname = os.path.dirname(__file__)
-driverpath = dirname + "/chromedriver"
+driverpath = r'%s' % dirname + r"/chromedriver"
 print("Running from: " + driverpath)
 
 # gets user input
@@ -19,7 +20,6 @@ delay = int(input("Enter how long you'd like the webdriver to wait on load: "))
 
 # configures webdriver options
 options = webdriver.ChromeOptions()
-options.add_argument("start-maximized")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
 driver = webdriver.Chrome(options=options, executable_path=driverpath)
@@ -54,11 +54,14 @@ for i in range(0, len(proxies)):
         print("Proxy selected: {}".format(proxies[i]))
         options = webdriver.ChromeOptions()
         options.add_argument('--proxy-server={}'.format(proxies[i]))
-        options.add_argument("start-maximized")
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
         driver = webdriver.Chrome(options=options, executable_path=driverpath)
         driver.get(link)
+        # simulating human behavior
+        element = driver.find_element_by_name("body")
+        element.clear()
+        element.send_keys(Keys.ARROW_DOWN, Keys.ARROW_UP, " ")
         time.sleep(delay)
         driver.quit()
     except Exception:
