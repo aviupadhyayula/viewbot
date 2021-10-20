@@ -6,63 +6,74 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
-# setting up relative file path
-dirname = os.path.dirname(__file__)
-driverpath = r'%s' % dirname + r"/chromedriver"
-print("Running from: " + driverpath)
+def get_input():
+    global link
+    global views
+    global delay
+    link = input("Link: ")
+    views = int(input("Views: "))
+    delay = int(input("Delay: "))
 
-# gets user input
-link = input("Enter your link: ")
-views = int(input("How many views: "))
-delay = int(input("Enter how long you'd like the webdriver to wait on load: "))
+def init_driver():
+    dirname = os.path.dirname(__file__)
+    global driverpath
+    driverpath = r'%s' % dirname + r'/chromedriver'
+    print("Running Selenium from: " + driverpath)
+    options = webdriver.ChromeOptions()
+    global driver
+    driver = webdriver.Chrome(options=options, executable_path=driverpath)
 
-# configures webdriver options
-options = webdriver.ChromeOptions()
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
-options.add_experimental_option('useAutomationExtension', False)
-driver = webdriver.Chrome(options=options, executable_path=driverpath)
-
-# scrapes proxies from provider
-driver.get("https://sslproxies.org/")
-# scrolls table with proxies into view
-driver.execute_script("return arguments[0].scrollIntoView(true);", WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, "//table[@class='table table-striped table-bordered']//th[contains(., 'IP Address')]"))))
-ips = []
-ports = []
-for i in range(views):
+def scrape_proxies():
+    driver.get("https://sslproxies.org/")
     try:
-        # cycles through rows in table using XPATH; scrapes content
-        ip = driver.find_element_by_xpath('//*[@id="list"]/div/div[2]/div/table/tbody/tr[{}]/td[1]'.format(i)).text
-        port = driver.find_element_by_xpath('//*[@id="list"]/div/div[2]/div/table/tbody/tr[{}]/td[2]'.format(i)).text
-        ips.append(ip)
-        ports.append(port)
-    except:
-        print("Table entry {} not found".format(i))
-driver.quit()
+        driver.execute_script("return arguments[0].scrollIntoView(true);", WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, "//table[@class='table table-striped table-bordered']//th[contains(., 'IP Address')]"))))
+    except TimeoutException:
+        print('Proxy table not found.')
+    else:
+        ips = []
+        ports = []
+        for i in range(1, views + 1):
+            try:
+                ip = driver.find_element(By.XPATH, '//*[@id="list"]/div/div[2]/div/table/tbody/tr[{}]/td[1]'.format(i))
+                port = driver.find_element(By.XPATH, '//*[@id="list"]/div/div[2]/div/table/tbody/tr[{}]/td[2]'.format(i))
+            except NoSuchElementException:
+                print('Table entry {} not found'.format(i))
+            else:
+                ips.append(ip.text)
+                ports.append(port.text)
+        proxies = format_proxies(ips, ports)
+        driver.quit()
+        return proxies
 
-# formats proxies to make them usable
-proxies = []
-for i in range(0, len(ips)):
-    proxies.append(ips[i]+':'+ports[i])
-print("Proxies used: ")
-print(proxies)
+def format_proxies(ips, ports):
+    proxies = []
+    for i in range(0, len(ips)):
+        proxies.append(ips[i] + ':' + ports[i])
+    return proxies
 
-for i in range(0, len(proxies)):
-    # visits site; configures driver to use new proxy each itme
-    try:
-        print("Proxy selected: {}".format(proxies[i]))
+def create_traffic(proxies):
+    for i in range(0, len(proxies)):
+        print('Proxy selected: ' + str(proxies[i]))
         options = webdriver.ChromeOptions()
         options.add_argument('--proxy-server={}'.format(proxies[i]))
-        options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        options.add_experimental_option('useAutomationExtension', False)
         driver = webdriver.Chrome(options=options, executable_path=driverpath)
         driver.get(link)
-        # simulating human behavior
-        element = driver.find_element_by_name("body")
-        element.clear()
-        element.send_keys(Keys.ARROW_DOWN, Keys.ARROW_UP, " ")
-        time.sleep(delay)
-        driver.quit()
-    except Exception:
-        driver.quit()
+        try:
+            elem = driver.find_element(By.NAME, 'body')
+            element.send_keys(Keys.ARROW_DOWN, Keys.ARROW_UP, ' ')
+            time.sleep(delay)
+            driver.quit()
+        except NoSuchElementException:
+            driver.quit()
+
+def main():
+    get_input()
+    init_driver()
+    proxies = scrape_proxies()
+    create_traffic(proxies)
+
+if __name__ == "__main__":
+    main()
